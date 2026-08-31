@@ -1,0 +1,36 @@
+name: Build Moto Edge 20 Pro APK & LSPosed Module
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch: # 支持网页端点击一键手动触发构建
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant Execute Permission to Gradlew
+        run: chmod +x gradlew
+
+      - name: Build APKs with Gradle
+        run: ./gradlew assembleRelease --stacktrace
+
+      - name: Upload Built APKs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Moto-Edge-20-Pro-Release-APKs
+          path: "**/build/outputs/apk/**/*.apk"
