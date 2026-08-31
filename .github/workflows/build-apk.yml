@@ -2,35 +2,59 @@ name: Build Moto Edge 20 Pro APK & LSPosed Module
 
 on:
   push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
-  workflow_dispatch: # 支持网页端点击一键手动触发构建
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+# 赋予 Actions 自动创建 Release 和上传文件的权限
+permissions:
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Source Code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: gradle
 
-      - name: Grant Execute Permission to Gradlew
+      - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
       - name: Build APKs with Gradle
         run: ./gradlew assembleRelease --stacktrace
 
-      - name: Upload Built APKs
+      # 1. 仍然在 Actions 内部上传一份备份产物
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v4
-        if: always()
         with:
-          name: Moto-Edge-20-Pro-Release-APKs
-          path: "**/build/outputs/apk/**/*.apk"
+          name: Moto-5G-Complete-Release-APKs
+          path: |
+            app/build/outputs/apk/release/*.apk
+            lsposed/build/outputs/apk/release/*.apk
+
+      # 2. 自动发布到 Releases 页面供直接下载
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "v1.0.${{ github.run_number }}"
+          name: "Auto Build v1.0.${{ github.run_number }}"
+          body: |
+            ### 🤖 自动构建更新
+            * 编译时间：${{ github.event.head_commit.timestamp }}
+            * 提交信息：${{ github.event.head_commit.message }}
+            
+            已包含最新编译打包的 `.apk` 文件，点击下方 Assets 即可直接下载。
+          draft: false
+          prerelease: false
+          files: |
+            app/build/outputs/apk/release/*.apk
+            lsposed/build/outputs/apk/release/*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
