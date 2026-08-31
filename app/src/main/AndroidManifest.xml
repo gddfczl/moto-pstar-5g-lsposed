@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.moto.pstar.nrswitcher.lsposed">
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <application
+        android:allowBackup="false"
+        android:icon="@drawable/ic_tile_sim1"
+        android:label="Moto 5G 双卡切换 (LSPosed)"
+        android:supportsRtl="true"
+        android:theme="@android:style/Theme.DeviceDefault.DayNight">
+
+        <!-- 标识为 Xposed / LSPosed 模块 -->
+        <meta-data
+            android:name="xposedmodule"
+            android:value="true" />
+        <meta-data
+            android:name="xposeddescription"
+            android:value="【LineageOS 23.2/Android 16 专版】为 Moto Edge 20 Pro 注入原生双卡 5G/4G 下拉状态栏磁贴与特权射频切换 Hook" />
+        <meta-data
+            android:name="xposedminversion"
+            android:value="93" />
+        <!-- 声明 LSPosed 自动推荐勾选的作用域 -->
+        <meta-data
+            android:name="xposedscope"
+            android:resource="@array/xposed_scope" />
+
+        <!-- 主控制台 Activity (检测 Root 权限与双卡状态) -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="Moto 5G 双卡切换"
+            android:theme="@android:style/Theme.DeviceDefault.DayNight">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- SIM 1 网络切换磁贴 -->
+        <service
+            android:name=".Sim1NetworkTileService"
+            android:label="SIM 1 5G/4G"
+            android:icon="@drawable/ic_tile_sim1"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <!-- SIM 2 网络切换磁贴 -->
+        <service
+            android:name=".Sim2NetworkTileService"
+            android:label="SIM 2 5G/4G"
+            android:icon="@drawable/ic_tile_sim2"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+    </application>
+
+</manifest>
