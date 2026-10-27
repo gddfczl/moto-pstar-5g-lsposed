@@ -30,6 +30,10 @@ jobs:
       - name: Build APKs with Gradle
         run: ./gradlew assembleRelease --stacktrace
 
+      - name: Rename APK file
+        run: |
+          mv app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/Moto_5G_Switcher_LO24_v1.0.${{ github.run_number }}.apk
+
       # 1. 仍然在 Actions 内部上传一份备份产物
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
@@ -37,7 +41,6 @@ jobs:
           name: Moto-5G-Complete-Release-APKs
           path: |
             app/build/outputs/apk/release/*.apk
-            lsposed/build/outputs/apk/release/*.apk
 
       # 2. 自动发布到 Releases 页面供直接下载
       - name: Create GitHub Release
