@@ -17,7 +17,7 @@
             android:value="true" />
         <meta-data
             android:name="xposeddescription"
-            android:value="【LineageOS 23.2/Android 16 专版】为 Moto Edge 20 Pro 注入原生双卡 5G/4G 下拉状态栏磁贴与特权射频切换 Hook" />
+            android:value="【LineageOS 24/Android 16 专版】为 Moto Edge 20 Pro 注入原生双卡 5G/4G 下拉状态栏磁贴与特权射频切换 Hook。注意：LineageOS 24 存在下拉状态栏时系统 BUG，请参考说明。" />
         <meta-data
             android:name="xposedminversion"
             android:value="93" />

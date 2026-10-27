@@ -8,7 +8,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.moto.pstar.nrswitcher.lsposed"
+        applicationId = "com.moto.pstar.nrswitcher.lsposed.lo24"
         minSdk = 30
         targetSdk = 34
         versionCode = 100
@@ -35,4 +35,5 @@ dependencies {
     compileOnly("de.robv.android.xposed:api:82")
     compileOnly("de.robv.android.xposed:api:82:sources")
     implementation("androidx.core:core-ktx:1.12.0")
+    implementation("com.github.topjohnwu.libsu:core:5.2.2")
 }

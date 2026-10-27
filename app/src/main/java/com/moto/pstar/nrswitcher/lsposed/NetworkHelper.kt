@@ -6,6 +6,8 @@ import android.util.Log
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 
+import com.topjohnwu.superuser.Shell
+
 object NetworkHelper {
 
     private const val TAG = "Moto5GHelper"
@@ -45,21 +47,8 @@ object NetworkHelper {
 
     fun execSuCommands(cmds: Array<String>): Pair<Int, String> {
         return try {
-            val process = Runtime.getRuntime().exec("su")
-            val os = process.outputStream
-            for (cmd in cmds) {
-                os.write(cmd.toByteArray())
-                os.write(10) // 写入 '\n'
-            }
-            val exitCmd = byteArrayOf('e'.code.toByte(), 'x'.code.toByte(), 'i'.code.toByte(), 't'.code.toByte())
-            os.write(exitCmd)
-            os.write(10)
-            os.flush()
-            os.close()
-
-            val outText = readAllText(process.inputStream)
-            val exitCode = process.waitFor()
-            Pair(exitCode, outText)
+            val result = Shell.cmd(*cmds).exec()
+            Pair(result.code, result.out.joinToString("\n"))
         } catch (e: Exception) {
             Log.e(TAG, "execSuCommands 异常: ${e.message}")
             Pair(-1, e.message ?: "")

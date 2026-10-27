@@ -22,7 +22,7 @@ class MainActivity : Activity() {
         }
 
         val title = TextView(this).apply {
-            text = "Moto 5G 双卡切换 (LineageOS 23.2)"
+            text = "Moto 5G 双卡切换 (LineageOS 24)"
             textSize = 20f
             setTypeface(null, android.graphics.Typeface.BOLD)
             setTextColor(0xFF22C55E.toInt())
